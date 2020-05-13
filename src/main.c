@@ -30,32 +30,75 @@
 
 int main () {
     struct station_t stations = {NULL, 0};
-    add_station (set_station (input_word (NULL, 256, stdin, stdout, "Введите название станции: "), NULL), &stations);
-    add_station (set_station ("Per", NULL), &stations);
-    print_station_t (stations, stdout);
-    
     struct route_t routes = {NULL, 0};
+    
 
-    add_route (
-        set_route (
-            *add_station (
-                set_station (
-                    input_word (
-                        NULL, 256, stdin, stdout, "Введите название станции: "
-                    ),
-                    NULL
-                ),
-                &stations
-            ),
-            ask_date (
-                NULL, stdin, stdout, "Введите дату прибытия:\n"
-            ),
-            NULL
-        ),
-        &routes
-    );
+    station* exists;
+    char key;
+cancel:
+    while (1) {
+        fprintf (stdout, "\n\nq - выход\ns - создание станции\nr - создание маршрута\np - печать сводных таблиц\n");
+        key = input_key (stdin, stdout, "qsrp", "Выберите пункт меню: ");
+        switch (key) {
+        case ('r'):
+            /// Добавление новой станции
+            exists = find_station (
+                    set_station (input_word (NULL, 256, stdin, stdout, "Укажите название станции: "), NULL),
+                    stations);
+            if (exists) {
+                add_route (
+                    set_route (
+                        *exists,
+                        ask_date (NULL, stdin, stdout, "Укажите дату прибытия:\n"),
+                        NULL),
+                    &routes);
+            } else {
+                printf ("Станции с таким названием не существует.\n");
+            }
+            
+            free (exists);
+            break;
+        
 
-    print_route_t (routes, stdout);
+        case ('s'):
+            add_station (set_station (input_word (NULL, 256, stdin, stdout, "Введите название станции: "), NULL), &stations);
+            break;
+
+
+        case ('p'):
+            while (key = input_key (stdin, stdout, "rsc", "Что вывести на печать? : ")) {
+                switch (key) {
+                case ('r'):
+                    print_route_t (routes, stdout);
+                    goto cancel;
+                    break;
+
+                case ('s'):
+                    print_station_t (stations, stdout);
+                    goto cancel;
+                    break;
+
+                case ('c'):
+                    goto cancel;
+                    break;
+
+                default:
+                    fprintf (stdout, "Ошибка ввода, повторите ввод.\n");
+                }
+            }
+            break;
+
+
+        case ('q'):
+            return 0;
+            break;
+
+
+        default:
+            fprintf (stdout, "Ошибка ввода, повторите ввод.\n");
+            break;
+        }
+    }
 
     return 0;
 }

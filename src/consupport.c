@@ -16,9 +16,9 @@
 */ 
 char input_key (FILE* istream, FILE* ostream, const char* purposes, const char* prompt) {
     char key;
-
     fprintf (ostream, prompt);
     fscanf (istream, "%c", &key);
+    while (getchar() != '\n');
     
     while (*purposes) {
         if (*purposes==key) {
@@ -41,6 +41,8 @@ int input_num (int* num, FILE* istream, FILE* ostream, const char* prompt) {
     int* tmp = (int*) malloc (sizeof (int));
     fprintf (ostream, prompt);
     fscanf (istream, "%d", tmp);
+    while (getchar() != '\n');
+    
     if (num) {
         *num = *tmp;
     }
@@ -58,6 +60,8 @@ char* input_word (char* str, int size, FILE* istream, FILE* ostream, const char*
     char* tmp = (char*) malloc (size*sizeof(char));
     fprintf (ostream, prompt);
     fscanf (istream, "%s", tmp);
+    while (getchar() != '\n');
+
     if (str) {
         strcpy (str, tmp);
     }
