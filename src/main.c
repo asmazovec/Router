@@ -56,7 +56,6 @@ cancel:
                 printf ("Станции с таким названием не существует.\n");
             }
             
-            free (exists);
             break;
         
 
@@ -66,6 +65,7 @@ cancel:
 
 
         case ('p'):
+            fprintf (stdout, "r - маршруты\ns - станции\nc - отмена ввода \n");
             while (key = input_key (stdin, stdout, "rsc", "Что вывести на печать? : ")) {
                 switch (key) {
                 case ('r'):
@@ -90,6 +90,7 @@ cancel:
 
 
         case ('q'):
+            free (exists);
             return 0;
             break;
 

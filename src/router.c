@@ -59,7 +59,6 @@ int print_route_t (struct route_t current, FILE* ostream) {
     for (int i = 0; i < current.size; i++) {
         fprintf (ostream, "%-4d ", i);
         print_route (current.table[i], ostream);
-        fprintf (ostream, "\n");
     }
     return 0;
 }
